@@ -15,7 +15,7 @@ zcat ${VCF_PREFIX}.vcf.gz \
     | bcftools plugin fill-tags -- -t AF \
     | bcftools view --min-ac 1 \
     | bgzip -c \
-    > ${VCF_PREFIX}.polarized.vcf.gz
+    > ${VCF_PREFIX}.polarized.vcf.gz &&
 
 tabix -p vcf -f ${VCF_PREFIX}.polarized.vcf.gz
 

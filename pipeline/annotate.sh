@@ -14,6 +14,7 @@ zcat ${VCF_PREFIX}.vcf.gz \
     -f $FASTA \
     | vcfanno -p 1 cadd.toml /dev/stdin \
         | bgzip -c \
-        > ${VCF_PREFIX}.af.cadd.vcf.gz
+        > ${VCF_PREFIX}.af.cadd.vcf.gz &&
+
 tabix -p vcf -f ${VCF_PREFIX}.af.cadd.vcf.gz
 
