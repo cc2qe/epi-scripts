@@ -6,7 +6,7 @@ VCF_PREFIX=chroms/${CHROM}/chr${CHROM}.af.cadd.snpEff.polarized
 PLINK_PREFIX=chroms/${CHROM}/chr${CHROM}.exonic.pol
 
 # A copy of the VCF without the genotypes, so that we can polarize `--a2-allele`
-zcat ${VCF_PREFIX}.vcf.gz | cut -f -8 > ${VCF_PREFIX}.noGT.vcf
+zcat ${VCF_PREFIX}.vcf.gz | cut -f -8 > ${VCF_PREFIX}.noGT.vcf &&
 
 # load VCF into plink
 plink1.9 \
@@ -16,7 +16,7 @@ plink1.9 \
     --biallelic-only \
     --a2-allele ${VCF_PREFIX}.noGT.vcf 4 3 '#' \
     --make-bed \
-    --out ${PLINK_PREFIX}
+    --out ${PLINK_PREFIX} &&
 
 plink1.9 \
     --threads 4 \
