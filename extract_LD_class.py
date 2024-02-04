@@ -34,12 +34,12 @@ description: extract plink LD values based on variant attributes")
     parser.add_argument('--cadd_a',
                         metavar='STR', dest='cadd_a',
                         required=False,
-                        type=str, default=0,
+                        type=str, default='0,1000',
                         help='CADD phred score range A. E.g. "0,20". [0,1000]')
     parser.add_argument('--cadd_b',
                         metavar='STR', dest='cadd_b',
                         required=False,
-                        type=str, default=1000,
+                        type=str, default='0,1000',
                         help='CADD phred score range B. E.g. "0,20".[0,1000]')
 
     # parse the arguments
@@ -87,7 +87,7 @@ def myfunc(input_file,
                         index_col=2, # variant id is row index
                         names=['chr', 'pos', 'id', 'gene', 'func', 'caddphred'])
     plink_header = input_file.readline().rstrip().split()
-    print('\t'.join(plink_header))
+    print('\t'.join(plink_header + ['CADD_A', 'CADD_B']))
 
     # i = 0
     for line in input_file:
@@ -123,7 +123,7 @@ def myfunc(input_file,
             var_pass = 1
 
         if var_pass:
-            print('\t'.join(v))
+            print('\t'.join(map(str, v + [cadd_a, cadd_b])))
 
     # print(vardf)
     return

@@ -1,0 +1,5 @@
+[[annotation]]
+file="/net/home/colby/projects/epistasis/annotations/GRCh37/CADD1.7/whole_genome_SNVs.tsv.gz"
+names=["CADDPHRED"]
+ops=["by_alt"]
+columns=[6]
