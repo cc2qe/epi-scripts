@@ -43,7 +43,6 @@ plink1.9 \
     --ld-window-r2 0 \
     --out ${PLINK_PREFIX} &&
 
-
 # From the LD file, extract only variant pairs affecting the same gene
 zcat ${PLINK_PREFIX}.ld.gz | tr -s ' ' '\t' | sed 's/^\t//g' \
     | zjoin -p "CHR" -a stdin -b <(zcat ${OUT_PREFIX}/impact.txt.gz) -1 3 -2 3 \
