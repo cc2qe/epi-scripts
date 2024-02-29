@@ -70,7 +70,7 @@ def scalarize(x):
 
 def listize(x):
     if isinstance(x, pd.Series):
-        return(x)
+        return(x.tolist())
     else:
         return [x]
 
@@ -85,9 +85,9 @@ def myfunc(input_file,
            cadd_range_b):
     vardf = pd.read_csv(attrib_path, sep='\t',
                         index_col=2, # variant id is row index
-                        names=['chr', 'pos', 'id', 'gene', 'func', 'caddphred'])
+                        names=['chr', 'pos', 'id', 'gene', 'impact', 'caddphred'])
     plink_header = input_file.readline().rstrip().split()
-    print('\t'.join(plink_header + ['CADD_A', 'CADD_B']))
+    print('\t'.join(plink_header + ['IMPACT_A', 'IMPACT_B', 'CADD_A', 'CADD_B']))
 
     # i = 0
     for line in input_file:
@@ -106,11 +106,10 @@ def myfunc(input_file,
         gene_a = listize(vardf.loc[varpair['SNP_A'], 'gene'])
         gene_b = listize(vardf.loc[varpair['SNP_B'], 'gene'])
 
-        # print('a', set(gene_a), 'b', set(gene_b))
-
-        if (set(gene_a).isdisjoint(set(gene_b))):
-            # print('disjoint!')
-            continue # go to next iteration
+        # -----------------------------------
+        # add functional impact
+        impact_a = listize(vardf.loc[varpair['SNP_A'], 'impact'])
+        impact_b = listize(vardf.loc[varpair['SNP_B'], 'impact'])
 
         # -----------------------------------
         # check if CADD scores are within range
@@ -122,8 +121,13 @@ def myfunc(input_file,
         elif in_range(cadd_a, cadd_range_b) and in_range(cadd_b, cadd_range_a):
             var_pass = 1
 
+        # if variant pair passes all tests, print
         if var_pass:
-            print('\t'.join(map(str, v + [cadd_a, cadd_b])))
+            for i in range(len(gene_a)):
+                for j in range(len(gene_b)):
+                    # if genes match, then print
+                    if (gene_a[i] == gene_b[j]):
+                        print('\t'.join(map(str, v[:-2] + [gene_a[i], gene_b[j], impact_a[i], impact_b[j], cadd_a, cadd_b])))
 
     # print(vardf)
     return
